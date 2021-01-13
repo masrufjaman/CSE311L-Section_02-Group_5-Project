@@ -198,6 +198,12 @@ header.hero .welcome span {
   margin-right: 0.25rem;
 }
 
+header.hero h3 {
+  font-family: "Raleway-bold";
+  color: var(--secondary);
+  font-size: 1.6rem;
+  margin-bottom: 0.5rem;
+}
 header.hero h1 {
   font-family: "Raleway-bold";
   color: var(--secondary);
@@ -416,23 +422,23 @@ section.contact-us .contact-info {
   justify-content: center;
 }
 
-section.contact-us .contact-info > div > div{
+section.contact-us .contact-info > div > div {
   display: flex;
   align-items: center;
   margin-bottom: 2rem;
 }
 
-section.contact-us .contact-info > div > div i{
+section.contact-us .contact-info > div > div i {
   color: var(--primary);
   margin-right: 1rem;
 }
 
-section.contact-us .contact-info > div > div > div{
+section.contact-us .contact-info > div > div > div {
   display: flex;
   flex-direction: column;
 }
 
-section.contact-us .contact-info > div > div > div:first-child{
+section.contact-us .contact-info > div > div > div:first-child {
   font-family: "Raleway-bold";
   margin-bottom: 0.25rem;
 }
@@ -528,7 +534,7 @@ ul {
   padding-left: 25px;
   padding-right: 25px;
 }
-.small-container .row{
+.small-container .row {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
