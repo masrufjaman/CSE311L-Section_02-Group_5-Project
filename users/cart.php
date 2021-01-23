@@ -66,7 +66,7 @@
           <span class="divider">|</span>
           <div>
             <i class="fas fa-user-plus"></i>
-            <a href="index.php?logout='1'" style="color: red;">logout</a>
+            <a href="../index.php?logout='1'" style="color: red;">logout</a>
           </div>
           <span class="divider">|</span>
           <div>
@@ -109,7 +109,6 @@
           <a href="./home.php">Home</a>
           <a href="./about_us.php">About us</a>
           <a href="./products.php">Products</a>
-          <a href="">Services</a>
           <a href="">Contact us</a>
         </div>
       </div>

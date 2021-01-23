@@ -59,7 +59,7 @@
     </nav>
     <!-- Navbar ends here -->
 
-    <!-- login Form -->
+    <!-- register Form -->
   <form method="post" action="register.php">
   	<?php include('errors.php'); ?>
     

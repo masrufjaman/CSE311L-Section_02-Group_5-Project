@@ -57,6 +57,7 @@
       <!-- top-nav end -->
 
     <!-- Navbar ends here -->
+
   <form method="post" action="login.php">
   <div class="container">
   	<?php include('errors.php'); ?>
@@ -81,6 +82,7 @@
   </div>
   </div>
   </form>
+  
   <!-- Footer Start -->
   <div class="footer">
       <div class="container">

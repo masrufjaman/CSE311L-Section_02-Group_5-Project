@@ -125,7 +125,6 @@
           <a href="./home.php">Home</a>
           <a href="./about_us.php">About us</a>
           <a href="./products.php">Products</a>
-          <a href="">Services</a>
           <a href="">Contact us</a>
         </div>
       </div>
