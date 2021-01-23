@@ -1,13 +1,13 @@
 <?php 
   session_start(); 
 
-  if (!isset($_SESSION['adminname'])) {
+  if (!isset($_SESSION['username'])) {
   	$_SESSION['msg'] = "You must log in first";
   	header('location: login.php');
   }
   if (isset($_GET['logout'])) {
   	session_destroy();
-  	unset($_SESSION['adminname']);
+  	unset($_SESSION['username']);
   	header("location: login.php");
   }
 ?>
@@ -56,7 +56,7 @@
   	<?php endif ?>
 
     <!-- logged in user information -->
-    <?php  if (isset($_SESSION['adminname'])) : ?>
+    <?php  if (isset($_SESSION['username'])) : ?>
         <!-- HEADER start here -->
     <header class="topbar">
       <div class="container flex justify-between items-center">
@@ -69,14 +69,18 @@
         </div>
         <div class="auth flex items-center">
           <div>
-            <i class="fa fa-briefcase"></i>
+            <i class="fas fa-users"></i>
             
-            <a><strong><?php echo $_SESSION['adminname']; ?></strong></a>
+            <a><strong><?php echo $_SESSION['username']; ?></strong></a>
           </div>
           <span class="divider">|</span>
           <div>
             <i class="fas fa-user-plus"></i>
             <a href="../index.php?logout='1'" style="color: red;">logout</a>
+          </div>
+          <span class="divider">|</span>
+          <div>
+            <a class="nav-link" href="cart.php"><i class="fas fa-shopping-cart"></i> <span id="cart-item" class="badge badge-danger"></span></a>
           </div>
         </div>
       </div>
@@ -96,7 +100,7 @@
           </div>
           <!-- logo -->
           <div class="branding">
-            <a href="./index.php"><img src="./images/logo.png" alt="" /></a>
+            <img src="../images/logo.png" alt="" />
           </div>
           <div class="time flex items-center">
             <i class="far fa-clock"></i>
@@ -112,16 +116,51 @@
       <!-- bottom-nav start -->
       <div class="navbar">
         <div class="container flex justify-center">
-          <a href="./userdetails.php">User Details</a>
-          <a href="./employee.php">Employee Details</a>
-          <a href="./productdetails.php">Products Details</a>
+          <a href="./home.php">Home</a>
+          <a href="./about_us.php">About us</a>
+          <a href="./products.php">Products</a>
+          <a href="./contact.php" class="active">Contact us</a>
         </div>
       </div>
       <!-- bottom-nav end -->
     </nav>
     <!-- Navbar ends here -->
 
-  
+    <div class="container">
+      <div class="welcome flex items-center justify-center">
+          <span><h2><br></br>BringStorm Shop</h2></span>
+        </div>
+        <div>
+        <p><br></br></p>
+          <p>
+          BringStorm Shop is an online shop in Dhaka, Bangladesh.
+        We believe time is valuable to our fellow Dhaka residents, 
+        and that they should not have to waste hours in traffic, 
+        brave harsh weather and wait in line just to buy necessities!  
+        This is why we are providng every day needs to our customers’ 
+        by this platform Dhaka. BringStorm Shop is a work in progress, 
+        and we hope to get better over time.
+        We are firm believers in using technology and education to improve Bangladesh, 
+        and we will continue to invest all our effort in pushing the boundaries of technology.
+          </p>
+        </br>
+        <p>If you have ideas on how we can improve, we would love to hear from you. Please do email us at stormbringer@gmail.com.</p>
+        </br>
+        </br>
+        <span><h2>Contact us:</h2></span>
+        <p><h3>
+            Md. Rashiqur Rahman &nbsp &nbsp &nbsp Email: rashiqur.rahman@northsouth.edu </br>
+            Sabbir Ahmed &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp  &nbsp Email: sabbir.ahmed15@northsouth.edu </br>
+            Masruf Jaman &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp  &nbsp Email: masruf.jaman@northsouth.edu </br>
+            Anandah Hossain Rafi &nbsp &nbsp &nbsp Email: hossain.rafi@northsouth.edu 
+        </h3></p>
+        </br>
+        </br>
+
+        </div>
+      </div>
+
+
   <!-- Footer Start -->
   <div class="footer">
       <div class="container">
@@ -130,12 +169,12 @@
             <h3>Download Our App</h3>
             <p>Download App for Android & ios mobile phone.</p>
             <div class="app-logo">
-              <img src="/images/play-store.png" alt="" />
-              <img src="/images/app-store.png" alt="" />
+              <img src="../images/play-store.png" alt="" />
+              <img src="../images/app-store.png" alt="" />
             </div>
           </div>
           <div class="footer-col-2">
-            <img src="/images/Logo2.png" alt="" />
+            <img src="../images/Logo2.png" alt="" />
             <p>
               Our Purpose Is To Sustainably Make the pleasure and Benefits of
               Sports Accessible to the Many.
@@ -172,106 +211,60 @@
     </div>
     <!-- Footer end -->
 
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js'></script>
+
+  <script type="text/javascript">
+  $(document).ready(function() {
+
+    // Send product details in the server
+    $(".addItemBtn").click(function(e) {
+      e.preventDefault();
+      var $form = $(this).closest(".form-submit");
+      var pid = $form.find(".pid").val();
+      var pname = $form.find(".pname").val();
+      var pprice = $form.find(".pprice").val();
+      var pimage = $form.find(".pimage").val();
+      var pcode = $form.find(".pcode").val();
+
+      var pqty = $form.find(".pqty").val();
+
+      $.ajax({
+        url: 'action.php',
+        method: 'post',
+        data: {
+          pid: pid,
+          pname: pname,
+          pprice: pprice,
+          pqty: pqty,
+          pimage: pimage,
+          pcode: pcode
+        },
+        success: function(response) {
+          $("#message").html(response);
+          window.scrollTo(0, 0);
+          load_cart_item_number();
+        }
+      });
+    });
+
+    // Load total no.of items added in the cart and display in the navbar
+    load_cart_item_number();
+
+    function load_cart_item_number() {
+      $.ajax({
+        url: 'action.php',
+        method: 'get',
+        data: {
+          cartItem: "cart_item"
+        },
+        success: function(response) {
+          $("#cart-item").html(response);
+        }
+      });
+    }
+  });
   <?php endif ?>
   </script>
 </body>
 </html>
-<script type="text/javascript" language="javascript" >
- $(document).ready(function(){
-  
-  fetch_data();
-
-  function fetch_data()
-  {
-   var dataTable = $('#user_data').DataTable({
-    "processing" : true,
-    "serverSide" : true,
-    "order" : [],
-    "ajax" : {
-     url:"fetch.php",
-     type:"POST"
-    }
-   });
-  }
-  
-  function update_data(id, column_name, value)
-  {
-   $.ajax({
-    url:"update.php",
-    method:"POST",
-    data:{id:id, column_name:column_name, value:value},
-    success:function(data)
-    {
-     $('#alert_message').html('<div class="alert alert-success">'+data+'</div>');
-     $('#user_data').DataTable().destroy();
-     fetch_data();
-    }
-   });
-   setInterval(function(){
-    $('#alert_message').html('');
-   }, 5000);
-  }
-
-  $(document).on('blur', '.update', function(){
-   var id = $(this).data("id");
-   var column_name = $(this).data("column");
-   var value = $(this).text();
-   update_data(id, column_name, value);
-  });
-  
-  $('#add').click(function(){
-   var html = '<tr>';
-   html += '<td contenteditable id="data1"></td>';
-   html += '<td contenteditable id="data2"></td>';
-   html += '<td><button type="button" name="insert" id="insert" class="btn btn-success btn-xs">Insert</button></td>';
-   html += '</tr>';
-   $('#user_data tbody').prepend(html);
-  });
-  
-  $(document).on('click', '#insert', function(){
-   var first_name = $('#data1').text();
-   var last_name = $('#data2').text();
-   if(first_name != '' && last_name != '')
-   {
-    $.ajax({
-     url:"insert.php",
-     method:"POST",
-     data:{first_name:first_name, last_name:last_name},
-     success:function(data)
-     {
-      $('#alert_message').html('<div class="alert alert-success">'+data+'</div>');
-      $('#user_data').DataTable().destroy();
-      fetch_data();
-     }
-    });
-    setInterval(function(){
-     $('#alert_message').html('');
-    }, 5000);
-   }
-   else
-   {
-    alert("Both Fields is required");
-   }
-  });
-  
-  $(document).on('click', '.delete', function(){
-   var id = $(this).attr("id");
-   if(confirm("Are you sure you want to remove this?"))
-   {
-    $.ajax({
-     url:"delete.php",
-     method:"POST",
-     data:{id:id},
-     success:function(data){
-      $('#alert_message').html('<div class="alert alert-success">'+data+'</div>');
-      $('#user_data').DataTable().destroy();
-      fetch_data();
-     }
-    });
-    setInterval(function(){
-     $('#alert_message').html('');
-    }, 5000);
-   }
-  });
- });
-</script>

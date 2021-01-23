@@ -38,6 +38,28 @@
       href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
+    <style>
+    
+      table {
+      border-collapse: collapse;
+      width: 100%;
+      color: #232b38;
+      font-family: monospace;
+      font-size: 25px;
+      text-align: left;
+      }
+
+      th {
+        background-color: #232b38;
+        color: white;
+      }
+
+      tr:nth-child(even) {
+      background-color: #f2f2f2
+      }    
+  
+    </style>
+
   </head>
 
     
@@ -96,7 +118,7 @@
           </div>
           <!-- logo -->
           <div class="branding">
-            <a href="./index.php"><img src="./images/logo.png" alt="" /></a>
+            <img src="../images/logo.png" alt="" />
           </div>
           <div class="time flex items-center">
             <i class="far fa-clock"></i>
@@ -114,14 +136,48 @@
         <div class="container flex justify-center">
           <a href="./userdetails.php">User Details</a>
           <a href="./employee.php">Employee Details</a>
-          <a href="./productdetails.php">Products Details</a>
+          <a href="./productdetails.php" class="active">Products Details</a>
         </div>
       </div>
       <!-- bottom-nav end -->
     </nav>
     <!-- Navbar ends here -->
 
+    <form method="post" action="productdetails.php">
+    <div class="container">
+    <table>
+      <tr>
+      <th>Id</th>
+      <th>Name</th>
+      <th>Price</th>
+      <th>Quantity</th>
+      <th>Product Code</th>
+      </tr>
+      <?php
+        $conn = mysqli_connect("localhost", "root", "", "supershop_management_system");
+      // Check connection
+        if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+      }
+     
+      $sql = "SELECT id, product_name, product_price, product_qty, product_code FROM product";
+      $result = $conn->query($sql);
   
+      if ($result->num_rows > 0) {
+        while($row = $result->fetch_assoc()) {
+          echo "<tr><td>" . $row["id"]. "</td><td>" . $row["product_name"] . "</td><td>". $row["product_price"]. "</td><td>". $row["product_qty"]. "</td><td>". $row["product_code"]. "</td></tr>";
+      }
+        echo "</table>";
+      } 
+        else { echo "0 results"; }
+      $conn->close();
+      ?>
+    </table>
+    </div>
+    </form>
+
+
+
   <!-- Footer Start -->
   <div class="footer">
       <div class="container">
@@ -130,12 +186,12 @@
             <h3>Download Our App</h3>
             <p>Download App for Android & ios mobile phone.</p>
             <div class="app-logo">
-              <img src="/images/play-store.png" alt="" />
-              <img src="/images/app-store.png" alt="" />
+              <img src="../images/play-store.png" alt="" />
+              <img src="../images/app-store.png" alt="" />
             </div>
           </div>
           <div class="footer-col-2">
-            <img src="/images/Logo2.png" alt="" />
+            <img src="../images/Logo2.png" alt="" />
             <p>
               Our Purpose Is To Sustainably Make the pleasure and Benefits of
               Sports Accessible to the Many.
@@ -176,102 +232,4 @@
   </script>
 </body>
 </html>
-<script type="text/javascript" language="javascript" >
- $(document).ready(function(){
-  
-  fetch_data();
 
-  function fetch_data()
-  {
-   var dataTable = $('#user_data').DataTable({
-    "processing" : true,
-    "serverSide" : true,
-    "order" : [],
-    "ajax" : {
-     url:"fetch.php",
-     type:"POST"
-    }
-   });
-  }
-  
-  function update_data(id, column_name, value)
-  {
-   $.ajax({
-    url:"update.php",
-    method:"POST",
-    data:{id:id, column_name:column_name, value:value},
-    success:function(data)
-    {
-     $('#alert_message').html('<div class="alert alert-success">'+data+'</div>');
-     $('#user_data').DataTable().destroy();
-     fetch_data();
-    }
-   });
-   setInterval(function(){
-    $('#alert_message').html('');
-   }, 5000);
-  }
-
-  $(document).on('blur', '.update', function(){
-   var id = $(this).data("id");
-   var column_name = $(this).data("column");
-   var value = $(this).text();
-   update_data(id, column_name, value);
-  });
-  
-  $('#add').click(function(){
-   var html = '<tr>';
-   html += '<td contenteditable id="data1"></td>';
-   html += '<td contenteditable id="data2"></td>';
-   html += '<td><button type="button" name="insert" id="insert" class="btn btn-success btn-xs">Insert</button></td>';
-   html += '</tr>';
-   $('#user_data tbody').prepend(html);
-  });
-  
-  $(document).on('click', '#insert', function(){
-   var first_name = $('#data1').text();
-   var last_name = $('#data2').text();
-   if(first_name != '' && last_name != '')
-   {
-    $.ajax({
-     url:"insert.php",
-     method:"POST",
-     data:{first_name:first_name, last_name:last_name},
-     success:function(data)
-     {
-      $('#alert_message').html('<div class="alert alert-success">'+data+'</div>');
-      $('#user_data').DataTable().destroy();
-      fetch_data();
-     }
-    });
-    setInterval(function(){
-     $('#alert_message').html('');
-    }, 5000);
-   }
-   else
-   {
-    alert("Both Fields is required");
-   }
-  });
-  
-  $(document).on('click', '.delete', function(){
-   var id = $(this).attr("id");
-   if(confirm("Are you sure you want to remove this?"))
-   {
-    $.ajax({
-     url:"delete.php",
-     method:"POST",
-     data:{id:id},
-     success:function(data){
-      $('#alert_message').html('<div class="alert alert-success">'+data+'</div>');
-      $('#user_data').DataTable().destroy();
-      fetch_data();
-     }
-    });
-    setInterval(function(){
-     $('#alert_message').html('');
-    }, 5000);
-   }
-  });
- });
-</script>
